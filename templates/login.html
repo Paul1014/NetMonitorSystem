@@ -10,8 +10,8 @@
     <meta name="description" content="Source code generated using layoutit.com">
     <meta name="author" content="LayoutIt!">
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for( 'static', filename= 'css/bootstrap.min.css' )}}"  >
+    <link rel="stylesheet" href="{{ url_for( 'static', filename= 'css/style.css' )}}" >
 
   </head>
   <body>
@@ -25,17 +25,18 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12" id="login_form">
 			 
       <form action="/login" method="post"> 
-        <label for="user_id">username:</label>
-          <input type="text" id="user_id" name="user_id">
+        <label for="username">username:</label>
+          <input type="text" id="username" name="username">
           <br>
         <label for="password">password:</label>
           <input type="password" id="password" name="password">
           <br>
-        <button name="Loginbtn" type="submit">Login</button> 
+        <button class="button" name="Loginbtn" type="submit">Login</button> 
     </form> 
+    <span> {{ failinfo }}</span>
 		</div>
 	</div>
 </div>
