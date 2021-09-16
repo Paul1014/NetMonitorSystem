@@ -67,8 +67,8 @@ def login():
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
-
-    return render_template('dashboard.html')
+    devices = Devices.query.all()
+    return render_template('dashboard.html',devices=devices)
 
 @app.route('/device_add', methods=['GET', 'POST'])
 def add():
@@ -101,7 +101,9 @@ def add():
 
             return render_template('add_form.html',status="Add success")
         
-
+@app.route('/device/<id>')
+def devices_status(id):
+    return render_template('device_cisco.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

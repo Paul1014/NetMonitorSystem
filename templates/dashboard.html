@@ -8,7 +8,23 @@
     <div class="container_cus">
         <div>
             <div class="devices_list">
-
+                <h3>Devices List</h3>
+                <table style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+                    <tr>
+                        <td>ID</td>
+                        <td>Devices Name</td>
+                        <td>IP address</td>
+                        <td></td>
+                    </tr>
+                    {% for device in devices %}
+                    <tr>
+                        <td>{{ device.device_id }}</td>
+                        <td>{{ device.name }}</td>
+                        <td>{{ device.IP }}</td>
+                        <td><a href="device/{{ device.device_id  }}">edit</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
             </div>
             <div class="devices_fuction">
                 <a href=device_add >
