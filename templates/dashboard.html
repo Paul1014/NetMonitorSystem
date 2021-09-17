@@ -4,6 +4,13 @@
         <title>NetMonintor System</title>
         <link rel="stylesheet" href="{{ url_for( 'static', filename= 'css/bootstrap.min.css' )}}"  >
         <link rel="stylesheet" href="{{ url_for( 'static', filename= 'css/style.css' )}}" >
+        <nav class="menu">
+            <ul id="menu"> 
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About</a></li>
+              <li><a href=logout>Logout</a></li>
+            </ul>
+          </nav>
     </head>
     <div class="container_cus">
         <div>
@@ -30,6 +37,7 @@
                 <a href=device_add >
                     <button class="button" name="Add_Devices" type="submit">Add Devices</button>
                 </a>
+            
             </div>
     </div>
 </html>

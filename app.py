@@ -10,8 +10,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Netmonitor.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
+app.config['SECRET_KEY'] = 'Skills39'
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager = LoginManager(app)
 
-class User(db.Model, UserMixin):
+
+
+class User(db.Model):
     __tablename__ = "User"
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -23,7 +29,6 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return '<User %r>'% self.username
-
 
 class Devices(db.Model):
     __tablename__ = "Devices"
@@ -45,6 +50,14 @@ class Devices(db.Model):
     def __repr__(self):
         return '<Devices %r>'% self.name
 
+class UserAuth(UserMixin):
+    pass
+
+@login_manager.user_loader
+def load_user(userid):
+    user = UserAuth()
+    user.id = userid
+    return user
 
 @app.route('/')
 def index():
@@ -58,17 +71,35 @@ def login():
     else:
         username = request.form['username']
         password = request.form['password']
-        DB_user = User.query.filter_by(username="admin").first()
-        if username == DB_user.username and password == DB_user.password :
-            return redirect(url_for('dashboard'))
-        else:
-            return render_template('login.html', failinfo="Login failed! Try again.")
+        try:
+            DB_user = User.query.filter_by(username=username).first()
+            if password == DB_user.password :
+                user = UserAuth()
+                user.id = username
+                login_user(user)
+                return redirect(url_for('dashboard'))
+            else:
+                return render_template('login.html', failinfo="Password is not correct! Try again.")
+        except:
+            return render_template('login.html', failinfo="Cannot found this Username, plz check.")
+            
+
+
+@app.route('/logout')  
+def logout():
+    logout_user()  
+    return redirect(url_for('login'))
+
 
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
-    devices = Devices.query.all()
-    return render_template('dashboard.html',devices=devices)
+    if current_user.is_active:
+        devices = Devices.query.all()
+        return render_template('dashboard.html',devices=devices)
+    else:
+        return "plz login!"
+
 
 @app.route('/device_add', methods=['GET', 'POST'])
 def add():

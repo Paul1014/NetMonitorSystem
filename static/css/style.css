@@ -18,3 +18,30 @@
   width: 600px;
   text-align:justify;
 }
+nav menu{
+  color: inherit; /* 移除超連結顏色 */
+  text-decoration: none;  /* 移除超連結底線 */
+}
+
+nav > ul {
+  background-color: rgb(230, 230, 230);
+    list-style: none;   /* 移除項目符號 */
+    margin: 0;
+    padding: 0;
+}
+
+/* 滑鼠移到 <a> 時變成深底淺色 */
+nav a:hover {
+  background-color: rgb(115, 115, 115);
+  color: white;
+}
+nav a {
+  color: inherit; /* 移除超連結顏色 */
+    font-size: 1.2rem;
+    text-decoration: none;  /* 移除超連結底線 */
+    padding: 10px;
+}
+#menu li {
+  display:inline;
+}
+
