@@ -1,16 +1,11 @@
 from app import db
 from app import User
-import getpass 
-def add_user(username,password):
+
+def add_admin():
     db.create_all()
-    try:
-        user = User(username=username, password=password)
-    except:
-        print("Add User has error")
+    user = User(username="admin", password="admin")
     db.session.add(user)
     db.session.commit()
 
-user = input("Enter your Username:")
-passwd = getpass.getpass("Enter your password:")
-
-add_user(user,passwd)
+if __main__ == "Useradd.py":
+    add_admin()
