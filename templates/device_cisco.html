@@ -4,12 +4,39 @@
         <title>NetMonintor System</title>
         <link rel="stylesheet" href="{{ url_for( 'static', filename= 'css/bootstrap.min.css' )}}"  >
         <link rel="stylesheet" href="{{ url_for( 'static', filename= 'css/style.css' )}}" >
+        <nav class="menu">
+            <ul id="menu"> 
+              <li><a href="/dashboard">Home</a></li>
+              <li><a href="#">About</a></li>
+              <li><a href=/logout>Logout</a></li>
+            </ul>
+          </nav>
     </head>
     <div class="container_cus">
         <div>
             <div class="devices_list">
                 <h3>Devices</h3>
+                <table style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+                    {% if snmp_info == 0%}
+                    No SNMP Information
+                    {% else %}
+                    <tr>
+                        <td>Hostname</td>
+                        <td>{{ snmp_info.Hostname }}</td>
+                    </tr>
+                    <tr>
+                        <td>System Uptime</td>
+                        <td>{{ snmp_info.Uptime }} h</td>
+                    </tr>
+                    <tr>
+                        <td>Free Memory</td>
+                        <td>{{ snmp_info.freeMem }} MB</td>
+                    </tr>
+                    {% endif %}
+                </table>
             </div>
-            </div>
+
+            
+        </div>
     </div>
 </html>

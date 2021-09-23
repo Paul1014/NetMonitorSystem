@@ -3,7 +3,7 @@ from flask import render_template,redirect,url_for,request
 from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 from flask_login import  UserMixin, LoginManager, login_required, current_user, login_user, logout_user
-from net_tool import Connect_SSH
+from net_tool import Connect_SSH, cisco_snmp, linux_snmp
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Netmonitor.db'
@@ -66,22 +66,25 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'GET':
-        return render_template('login.html',failinfo=" ")
+    if current_user.is_active:
+        return redirect(url_for('dashboard'))
     else:
-        username = request.form['username']
-        password = request.form['password']
-        try:
-            DB_user = User.query.filter_by(username=username).first()
-            if password == DB_user.password :
-                user = UserAuth()
-                user.id = username
-                login_user(user)
-                return redirect(url_for('dashboard'))
-            else:
-                return render_template('login.html', failinfo="Password is not correct! Try again.")
-        except:
-            return render_template('login.html', failinfo="Cannot found this Username, plz check.")
+        if request.method == 'GET':
+            return render_template('login.html',failinfo=" ")
+        else:
+            username = request.form['username']
+            password = request.form['password']
+            try:
+                DB_user = User.query.filter_by(username=username).first()
+                if password == DB_user.password :
+                    user = UserAuth()
+                    user.id = username
+                    login_user(user)
+                    return redirect(url_for('dashboard'))
+                else:
+                    return render_template('login.html', failinfo="Password is not correct! Try again.")
+            except:
+                return render_template('login.html', failinfo="Cannot found this Username, plz check.")
             
 
 
@@ -98,7 +101,7 @@ def dashboard():
         devices = Devices.query.all()
         return render_template('dashboard.html',devices=devices)
     else:
-        return "plz login!"
+        return redirect(url_for('login')) 
 
 
 @app.route('/device_add', methods=['GET', 'POST'])
@@ -134,7 +137,14 @@ def add():
         
 @app.route('/device/<id>')
 def devices_status(id):
-    return render_template('device_cisco.html')
+    device = Devices.query.filter_by(device_id=id).first()
+    print(device.DeviceTypes)
+    if device.DeviceTypes == "Cisco":
+        snmpinfo = cisco_snmp(device.IP,"paulsnmp")
+    else:
+        snmpinfo = linux_snmp(device.IP,"public")
+
+    return render_template('device_cisco.html', snmp_info=snmpinfo)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
