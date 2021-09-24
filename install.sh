@@ -14,9 +14,7 @@ sudo su net_admin -c "pip3 install -r /opt/NetMonitorSystem/requirments"
 echo "import sys" >> /opt/NetMonitorSystem/server.wsgi
 echo "from app import app as application" >>  /opt/NetMonitorSystem/server.wsgi
 echo "sys.path.insert(0, '/opt/NetMonitorSystem')" >> /opt/NetMonitorSystem/server.wsgi
-echo "activate_this = '/opt/NetMonitorSystem/venv/bin/activate'" >>  /opt/NetMonitorSystem/server.wsgi
-echo "with open(activate_this) as file_:" >>  /opt/NetMonitorSystem/server.wsgi
-echo "    exec(file_.read(), dict(__file__=activate_this))"  >>  /opt/NetMonitorSystem/server.wsgi
+
 
 ## Setup apache2 wsgi
 echo "<virtualhost *:80>" >> /etc/apache2/sites-available/flask.conf
@@ -31,6 +29,7 @@ echo        "Allow from all" >> /etc/apache2/sites-available/flask.conf
 echo      "</directory>" >> /etc/apache2/sites-available/flask.conf
 echo  "</virtualhost>" >> /etc/apache2/sites-available/flask.conf
 sudo a2ensite flask
+sudo a2disite 000-default.conf
 sudo systemctl restart apache2
 
 ## create admin user
