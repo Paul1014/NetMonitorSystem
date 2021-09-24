@@ -7,5 +7,6 @@ def add_admin():
     db.session.add(user)
     db.session.commit()
 
-if __main__ == "Useradd.py":
+if __name__ == '__main__':
+    print("Create admin account")
     add_admin()
