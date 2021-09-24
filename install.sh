@@ -8,8 +8,7 @@ sudo useradd net_admin -d /opt/NetMonitorSystem -M -r -s "$(which bash)"
 sudo chown -R net_admin:net_admin /opt/NetMonitorSystem
 sudo chomd 771 /opt/NetMonitorSystem
 echo 'su netadmin'
-sudo su net_admin
-pip3 install -r /opt/NetMonitorSystem/requirments
+sudo su net_admin -c "pip3 install -r /opt/NetMonitorSystem/requirments"
 
 ## Setup wsgi
 echo "import sys" >> /opt/NetMonitorSystem/server.wsgi
@@ -18,9 +17,6 @@ echo "sys.path.insert(0, '/opt/NetMonitorSystem')" >> /opt/NetMonitorSystem/serv
 echo "activate_this = '/opt/NetMonitorSystem/venv/bin/activate'" >>  /opt/NetMonitorSystem/server.wsgi
 echo "with open(activate_this) as file_:" >>  /opt/NetMonitorSystem/server.wsgi
 echo "    exec(file_.read(), dict(__file__=activate_this))"  >>  /opt/NetMonitorSystem/server.wsgi
-
-exit
-echo 'su previous user'
 
 ## Setup apache2 wsgi
 echo "<virtualhost *:80>" >> /etc/apache2/sites-available/flask.conf
