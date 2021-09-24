@@ -1,16 +1,24 @@
 #!/bin/bash
+sudo apt -y install python3-venv python3-pip python3
+sudo apt -y install apache2 libapache2-mod-wsgi-py3 
+sudo chown -r 777 /opt/NetMonitorSystem
+python3 -m venv /opt/NetMonitorSystem/venv
+source /opt/NetMonitorSystem/venv/bin/activate
+pip3 install -r /opt/NetMonitorSystem/requirments
+deactivate
 
 ## Setup wsgi
 echo "import sys" >> /opt/NetMonitorSystem/server.wsgi
 echo "sys.path.insert(0, '/opt/NetMonitorSystem')" >> /opt/NetMonitorSystem/server.wsgi
 echo "from app import app as application" >>  /opt/NetMonitorSystem/server.wsgi
+echo "activate_this = /opt/NetMonitorSystem/venv/bin/activate" >>  /opt/NetMonitorSystem/server.wsgi
+echo "with open(activate_this) as file_:" >>  /opt/NetMonitorSystem/server.wsgi
+echo "    exec(file_.read(), dict(__file__=activate_this))"  >>  /opt/NetMonitorSystem/server.wsgi
 
 ## 
 sudo useradd net_admin -d /opt/NetMonitorSystem -M -r -s "$(which bash)"
 sudo chown -R net_admin:net_admin /opt/NetMonitorSystem
 sudo chomd 771 /opt/NetMonitorSystem
-pip3 install -r /opt/NetMonitorSystem/requirments
-sudo apt -y install apache2 libapache2-mod-wsgi-py3 
 touch /etc/apache2/sites-available/flask.conf
 
 
