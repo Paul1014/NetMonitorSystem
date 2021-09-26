@@ -106,45 +106,62 @@ def dashboard():
 
 @app.route('/device_add', methods=['GET', 'POST'])
 def add():
-    if request.method == 'GET':
-        return render_template('add_form.html',status=" ")
-    else:
-        name = request.form['DeviceName']
-        IP = request.form['IP']
-        username = request.form['username']
-        password = request.form['password']       
-        device_type = request.form['devicestype']
-        testssh = request.form['testconnect']
-
-        if testssh == "yes":
-            if Connect_SSH(IP,username,password):
-                pass
-            else:
-                 return render_template('add_form.html',status="The SSH session cannot established")
-
-        if IP == "" or name == "":
-            return render_template('add_form.html',status="Some filed is not filled, plz check!")
+    if current_user.is_active:
+        if request.method == 'GET':
+            return render_template('add_form.html',status=" ")
         else:
-            db.create_all()
-            try:
-                New_Device = Devices(name, IP, device_type, username, password)
-                db.session.add(New_Device)
-                db.session.commit()
-            except:
-                return render_template('add_form.html',status="Devices is existed")
+            name = request.form['DeviceName']
+            IP = request.form['IP']
+            username = request.form['username']
+            password = request.form['password']       
+            device_type = request.form['devicestype']
+            testssh = request.form['testconnect']
 
-            return render_template('add_form.html',status="Add success")
-        
+            if testssh == "yes":
+                if Connect_SSH(IP,username,password):
+                    pass
+                else:
+                    return render_template('add_form.html',status="The SSH session cannot established")
+
+            if IP == "" or name == "":
+                return render_template('add_form.html',status="Some filed is not filled, plz check!")
+            else:
+                db.create_all()
+                try:
+                    New_Device = Devices(name, IP, device_type, username, password)
+                    db.session.add(New_Device)
+                    db.session.commit()
+                except:
+                    return render_template('add_form.html',status="Devices is existed")
+
+                return render_template('add_form.html',status="Add success")
+    else:
+        return redirect(url_for('login')) 
+
+
 @app.route('/device/<id>')
 def devices_status(id):
-    device = Devices.query.filter_by(device_id=id).first()
-    print(device.DeviceTypes)
-    if device.DeviceTypes == "Cisco":
-        snmpinfo = cisco_snmp(device.IP,"paulsnmp")
-    else:
-        snmpinfo = linux_snmp(device.IP,"public")
+    if current_user.is_active:
+        device = Devices.query.filter_by(device_id=id).first()
+        if device.DeviceTypes == "Cisco":
+            snmpinfo = cisco_snmp(device.IP,"paulsnmp")
+        else:
+            snmpinfo = linux_snmp(device.IP,"public")
 
-    return render_template('device_cisco.html', snmp_info=snmpinfo)
+        return render_template('device_cisco.html', snmp_info=snmpinfo, deviceID=id)
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/device/delete/<id>')
+def delete(id):
+    if current_user.is_active:
+        device = Devices.query.filter_by(device_id=id).first()
+        db.session.delete(device)
+        db.session.commit()
+        return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

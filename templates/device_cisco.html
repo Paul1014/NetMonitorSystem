@@ -33,7 +33,15 @@
                         <td>{{ snmp_info.freeMem }} MB</td>
                     </tr>
                     {% endif %}
+                    
                 </table>
+                <a href=/dashboard>
+                    <button class="button" name="return" type="button">Return</button>
+                </a>
+                <a href=/device/delete/{{ deviceID }}>
+                    <button class="button" name="return" type="button">Delete</button>
+                </a>
+                
             </div>
 
             
