@@ -4,37 +4,50 @@
         <title>NetMonintor System</title>
         <link rel="stylesheet" href="{{ url_for( 'static', filename= 'css/bootstrap.min.css' )}}"  >
         <link rel="stylesheet" href="{{ url_for( 'static', filename= 'css/style.css' )}}" >
+        <nav class="menu">
+            <ul id="menu"> 
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About</a></li>
+              <li><a href=logout>Logout</a></li>
+            </ul>
+          </nav>
     </head>
-    <div class="container_cus">
-        <div class="add_form">
-            <form action="/device_add" method="post">
-                <label for="Device_name:">Device name:</label>
-                <input type="text" id="DeviceName" name="DeviceName">
-                <br>
-                <label for="IP">IP Address:</label>
-                <input type="text" id="IP" name="IP">
-                <br>
-                <label for="username">username:</label>
-                <input type="text" id="username" name="username">
-                <br>
-                <label for="password">password:</label>
-                <input type="password" id="password" name="password">
-                <br>
-                <label for="DeviceType">DeviceType:</label>
-                <select name="devicestype">
-                    <option value="Linux">Linux</option>
-                    <option value="Cisco">Cisco IOS</option>
-                </select>
-                <br>
-                <label for="checkssh">Test ssh connection(tcp/22):</label>
-                <input type="radio" name="testconnect" value="yes"> yes
-                <input type="radio" name="testconnect" value="Taipei"> no
-                <br>
-                <button class="button" name="Add" type="submit">Add Devices</button>
-                <a href=dashboard><button class="button" name="Return" type="button">Return</button></a>
-                <br>
-            </form>
-            <span> {{ status }} </span>
+    <body>
+        <div class="container_cus">
+            <div class="add_form">
+                <form action="/device_add" method="post">
+                    <label for="Device_name:">Device name:</label>
+                    <input type="text" id="DeviceName" name="DeviceName">
+                    <br>
+                    <label for="IP">IP Address:</label>
+                    <input type="text" id="IP" name="IP">
+                    <br>
+                    <label for="username">username:</label>
+                    <input type="text" id="username" name="username">
+                    <br>
+                    <label for="password">password:</label>
+                    <input type="password" id="password" name="password">
+                    <br>
+                    <label for="DeviceType">DeviceType:</label>
+                    <select name="devicestype">
+                        <option value="Linux">Linux</option>
+                        <option value="Cisco">Cisco IOS</option>
+                    </select>
+                    <br>
+                    <label for="snmp_string">snmp_string:</label>
+                    <input type="snmp_string" id="snmp_string" name="snmp_string">
+                    <br>
+                    <br>
+                    <label for="checkssh">Test ssh connection(tcp/22):</label>
+                    <input type="radio" name="testconnect" value="yes"> yes
+                    <input type="radio" name="testconnect" value="Taipei"> no
+                    <br>
+                    <button class="button" name="Add" type="submit">Add Devices</button>
+                    <a href=dashboard><button class="button" name="Return" type="button">Return</button></a>
+                    <br>
+                </form>
+                <span> {{ status }} </span>
+            </div>
         </div>
-    </div>
+    </body>
 </html>

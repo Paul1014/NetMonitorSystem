@@ -12,39 +12,63 @@
             </ul>
           </nav>
     </head>
-    <div class="container_cus">
-        <div>
-            <div class="devices_list">
-                <h3>Devices</h3>
-                <table style="border:3px #cccccc solid;" cellpadding="10" border='1'>
-                    {% if snmp_info == 0%}
-                    No SNMP Information
-                    {% else %}
-                    <tr>
-                        <td>Hostname</td>
-                        <td>{{ snmp_info.Hostname }}</td>
-                    </tr>
-                    <tr>
-                        <td>System Uptime</td>
-                        <td>{{ snmp_info.Uptime }} h</td>
-                    </tr>
-                    <tr>
-                        <td>Free Memory</td>
-                        <td>{{ snmp_info.freeMem }} MB</td>
-                    </tr>
-                    {% endif %}
-                    
-                </table>
-                <a href=/dashboard>
-                    <button class="button" name="return" type="button">Return</button>
-                </a>
-                <a href=/device/delete/{{ deviceID }}>
-                    <button class="button" name="return" type="button">Delete</button>
-                </a>
-                
+    <body>
+        <div class="container_cus">
+            <div>
+                <div class="devices_list">
+                    <h3>Devices Info</h3>
+                    <table style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+                        <tr>
+                            <td>Hostname</td>
+                            <td id="Hostname"></td>
+                        </tr>
+                        <tr>
+                            <td>System Uptime</td>
+                            <td id="Uptime"></td>
+                        </tr>
+                    </table>
+                    <h3>Interface</h3>
+                    <table class="interface_table" id="interface_table" style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+                        <tr>
+                            <td>Name</td>
+                            <td>Status</td>
+                            <td>Speed</td>
+                            <td>In_byte</td>
+                            <td>Out_byte</td>
+                            <td>In_packet</td>
+                            <td>Out_packet</td>
+                        </tr>
+                        {% set num = 0 %}
+                        {% for interface in interfaces  %}
+                        <tr>
+                            <td id="interface_name_{{ loop.index }}"></td>
+                            <td id="interface_status_{{ loop.index }}"></td>
+                            <td id="interface_speed_{{ loop.index }}"></td>
+                            <td id="in_byte_{{ loop.index }}"></td>
+                            <td id="out_byte_{{ loop.index }}"></td>
+                            <td id="in_packet_{{ loop.index }}"></td>
+                            <td id="out_packet_{{ loop.index }}"></td>
+                        </tr>
+                            
+                        {% endfor %}
+                    </table>
+                </div>
+                <div class="function">
+                    <a href=/dashboard>
+                        <button class="button" name="return" type="button">Return</button>
+                    </a>
+                    <a href=/device/delete/{{ deviceID }}>
+                        <button class="button" name="return" type="button">Delete</button>
+                    </a>
+                </div>
             </div>
-
-            
         </div>
-    </div>
+    </body>
+    
+    <script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script> 
+    <script type="text/javascript" >
+        var urls = myFunc({{ deviceID }});
+        repeatedly_get();
+    </script>
+
 </html>
