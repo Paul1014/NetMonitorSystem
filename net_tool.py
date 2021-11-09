@@ -94,3 +94,63 @@ def linux_snmp(IP, community):
                 snmp_info[name] = str(val)
 
             return snmp_info
+
+def cisco_get_interface(IP, community):
+    traffic_dict = {}
+    interface_oid = '1.3.6.1.2.1.2.2.1.2'
+    interface_status_oid = '1.3.6.1.2.1.2.2.1.8'
+    interface_speed_oid = '1.3.6.1.2.1.2.2.1.5'
+    in_byte_oid = '1.3.6.1.2.1.2.2.1.10'
+    out_byte_oid = '1.3.6.1.2.1.2.2.1.16'
+    in_packet_oid = '1.3.6.1.2.1.2.2.1.11'
+    out_packet_oid = '1.3.6.1.2.1.2.2.1.17'
+    
+    errorIndication, errorStatus, errorIndex, \
+    varBindTable = cmdgen.CommandGenerator().bulkCmd(  
+                cmdgen.CommunityData(community),  
+                cmdgen.UdpTransportTarget((IP, 161)),  
+                0, 
+                25,
+                interface_oid,
+                interface_status_oid,
+                interface_speed_oid, 
+                in_byte_oid,
+                out_byte_oid,
+                in_packet_oid,
+                out_packet_oid
+            )
+
+    if errorIndication:
+        print(errorIndication)
+    else:
+        if errorStatus:
+            print("%s at %s\n" % (
+                errorStatus.prettyPrint(),
+                errorIndex and varBindTable[-1][int(errorIndex)-1] or '?'
+                ))
+        else:
+            for varBindTableRow in varBindTable:
+                for name, val in varBindTableRow:
+                    if interface_oid in str(name):
+                        interface_name = str(val)
+                        traffic_dict[interface_name] = {}
+
+                    elif interface_status_oid in str(name):
+                        traffic_dict[interface_name]["interface_status"]=str(val)
+
+                    elif interface_speed_oid in str(name):
+                        traffic_dict[interface_name]["interface_speed"]=str(val)
+
+                    elif in_byte_oid in str(name):
+                        traffic_dict[interface_name]["in_byte"]=str(val)
+
+                    elif out_byte_oid in str(name):
+                        traffic_dict[interface_name]["out_byte"]=str(val)
+
+                    elif in_packet_oid in str(name):
+                        traffic_dict[interface_name]["in_packet"]=str(val)
+                        
+                    elif out_packet_oid in str(name):
+                        traffic_dict[interface_name]["out_packet"]=str(val)
+
+            return traffic_dict
