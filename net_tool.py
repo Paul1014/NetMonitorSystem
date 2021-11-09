@@ -96,7 +96,9 @@ def linux_snmp(IP, community):
             return snmp_info
 
 def snmp_get_interfaces_traffic(IP, community):
-    traffic_dict = {}
+    interfaces_list = []
+    interfaces_list_index = 0
+
     interface_oid = '1.3.6.1.2.1.2.2.1.2'
     interface_status_oid = '1.3.6.1.2.1.2.2.1.8'
     interface_speed_oid = '1.3.6.1.2.1.2.2.1.5'
@@ -133,24 +135,25 @@ def snmp_get_interfaces_traffic(IP, community):
                 for name, val in varBindTableRow:
                     if interface_oid in str(name):
                         interface_name = str(val)
-                        traffic_dict[interface_name] = {}
+                        interfaces_list.append({"interface_name":str(val)})
 
                     elif interface_status_oid in str(name):
-                        traffic_dict[interface_name]["interface_status"]=str(val)
+                        interfaces_list[interfaces_list_index]["interface_status"]=str(val)
 
                     elif interface_speed_oid in str(name):
-                        traffic_dict[interface_name]["interface_speed"]=str(val)
+                        interfaces_list[interfaces_list_index]["interface_speed"]=str(val)
 
                     elif in_byte_oid in str(name):
-                        traffic_dict[interface_name]["in_byte"]=str(val)
+                        interfaces_list[interfaces_list_index]["in_byte"]=str(val)
 
                     elif out_byte_oid in str(name):
-                        traffic_dict[interface_name]["out_byte"]=str(val)
+                        interfaces_list[interfaces_list_index]["out_byte"]=str(val)
 
                     elif in_packet_oid in str(name):
-                        traffic_dict[interface_name]["in_packet"]=str(val)
+                        interfaces_list[interfaces_list_index]["in_packet"]=str(val)
                         
                     elif out_packet_oid in str(name):
-                        traffic_dict[interface_name]["out_packet"]=str(val)
+                        interfaces_list[interfaces_list_index]["out_packet"]=str(val)
+                        interfaces_list_index += 1
 
-            return traffic_dict
+            return interfaces_list
