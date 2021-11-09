@@ -95,7 +95,7 @@ def linux_snmp(IP, community):
 
             return snmp_info
 
-def cisco_get_interface(IP, community):
+def snmp_get_interfaces_traffic(IP, community):
     traffic_dict = {}
     interface_oid = '1.3.6.1.2.1.2.2.1.2'
     interface_status_oid = '1.3.6.1.2.1.2.2.1.8'
@@ -104,7 +104,7 @@ def cisco_get_interface(IP, community):
     out_byte_oid = '1.3.6.1.2.1.2.2.1.16'
     in_packet_oid = '1.3.6.1.2.1.2.2.1.11'
     out_packet_oid = '1.3.6.1.2.1.2.2.1.17'
-    
+
     errorIndication, errorStatus, errorIndex, \
     varBindTable = cmdgen.CommandGenerator().bulkCmd(  
                 cmdgen.CommunityData(community),  
