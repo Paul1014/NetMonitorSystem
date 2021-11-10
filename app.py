@@ -53,24 +53,6 @@ class Devices(db.Model):
         
     def __repr__(self):
         return '<Devices %r>'% self.name
-        
-class Devices_SNMP(db.Model):
-    __tablename__ = "Devices_SNMP"
-    device_id = db.Column(db.Integer, primary_key=True)
-    hostname = db.Column(db.String(80))
-    uptime = db.Column(db.String(80))
-    memory_usage = db.Column(db.String(80))
-    traffic_flow = db.Column(db.String(80))
-    
-    
-    def __init__(self, device_id, hostname, uptime, memory_usage):
-        self.device_id = device_id
-        self.hostname = hostname
-        self.uptime = uptime
-        self.memory_usage = memory_usage
-        
-    def __repr__(self):
-        return '<Devices_SNMP %r>'% self.name
 
 class UserAuth(UserMixin):
     pass
